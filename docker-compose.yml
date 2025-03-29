@@ -5,11 +5,12 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
+      MYSQL_DATABASE: pedidosdatabase
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - mydb-network
 
@@ -19,6 +20,9 @@ services:
     restart: always
     environment:
       PMA_HOST: mysql
+      PMA_USER: admin
+      PMA_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root  # Permitir acceso root si se necesita
     ports:
       - "8080:80"
     networks:
