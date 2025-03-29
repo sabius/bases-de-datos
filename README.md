@@ -8,8 +8,9 @@ Esta es una aplicación web desarrollada con un enfoque principal en MySQL, util
 
 * **Backend:** Java
 * **Base de Datos:** MySQL
-* **Servidor Local:** XAMPP
-* **Otros:** [herramientas adicionales]
+* **Servidor Local:** Docker, MySQL PHPMyAdmin o XAMPP
+* **Constructor del sitio:** Vite
+* **Librerías de Frontend:** Lit y Tailwind
 
 ## ⚙️ Instalación y Configuración
 
@@ -42,21 +43,20 @@ Antes de empezar, asegúrate de tener instalado:
    En phpMyAdmin, haz clic en "Nueva".
 
    Escribe el nombre de la base de datos y haz clic en "Crear".
-5. **Importar el Script SQL**
-
-   Ve a la pestaña "Importar".
-
-   Selecciona el archivo `script.sql` dentro de tu proyecto.
-
-   Haz clic en "Continuar" y espera la confirmación.
 
 ## 🚀 Ejecución de la Aplicación
 
-- [Aquí irían los pasos para ejecutar la aplicación Java]
+- Inicializar Docker
 
-## 📂 Estructura del Proyecto
+```bash
+git clone https://github.com/sabius/bases-de-datos.git
+```
 
-- [Aquí iría la estructura del proyecto, por ejemplo, una lista de directorios y archivos importantes]
+* Inicializar el Frontend
+
+  ```
+  docker compose up -d  
+  ```
 
 ## 🌐 Endpoints o Funcionalidades
 
