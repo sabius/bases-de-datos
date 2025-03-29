@@ -8,9 +8,11 @@ services:
       MYSQL_DATABASE: pedidosdatabase
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./sql:/docker-entrypoint-initdb.d:ro  # Se ejecutan todos los archivos dentro de la carpeta /sql
+      - ./sql:/docker-entrypoint-initdb.d:ro
+      - ./db.cnf:/etc/mysql/conf.d/db.cnf  # Montar el archivo de configuración
     networks:
       - mydb-network
     ports:
@@ -24,7 +26,6 @@ services:
       PMA_HOST: mysql
       PMA_USER: admin
       PMA_PASSWORD: admin
-      MYSQL_ROOT_PASSWORD: root  # Permitir acceso root si se necesita
     ports:
       - "5050:80"
     networks:

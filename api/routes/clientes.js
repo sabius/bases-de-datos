@@ -1,5 +1,5 @@
 import express from 'express';
-import {pool} from '../db.js';
+import pool from '../db.js'
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     const [rows] = await pool.query('SELECT * FROM Clientes');
     res.json(rows);
   } catch (error) {
-    res.status(500).json({ error: 'Error retrieving clients' });
+    res.status(500).json({ error: 'Error cargando los clientes' });
   }
 });
 

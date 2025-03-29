@@ -1,0 +1,22 @@
+# EditorConfig helps maintain consistent coding styles
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+charset = utf-8
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.md]
+trim_trailing_whitespace = false  # Allow whitespace in Markdown
+
+[*.json]
+indent_size = 2
+
+[*.yml, *.yaml]
+indent_size = 2
+
+[*.html, *.css, *.scss, *.js, *.ts, *.jsx, *.tsx]
+indent_size = 2

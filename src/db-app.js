@@ -2,13 +2,16 @@ import { LitElement, css, html } from 'lit'
 import litLogo from './assets/lit.svg'
 import viteLogo from '/vite.svg'
 
+import './components/userList';
+import './components/productosList'
+
 /**
  * An example element.
  *
  * @slot - This element has a slot
  * @csspart button - The button
  */
-export class MyElement extends LitElement {
+export class DbApp extends LitElement {
   static get properties() {
     return {
       /**
@@ -46,7 +49,10 @@ export class MyElement extends LitElement {
         </button>
       </div>
       <p class="read-the-docs">${this.docsHint}</p>
-    `
+
+      <user-list></user-list>
+      <productos-list></productos-list>
+    `;
   }
 
   _onClick() {
@@ -128,4 +134,4 @@ export class MyElement extends LitElement {
   }
 }
 
-window.customElements.define('my-element', MyElement)
+window.customElements.define('db-app', DbApp)

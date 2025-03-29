@@ -49,13 +49,13 @@ Antes de empezar, asegúrate de tener instalado:
 - Inicializar Docker
 
 ```bash
-git clone https://github.com/sabius/bases-de-datos.git
+docker compose up -d
 ```
 
 * Inicializar el Frontend
 
   ```
-  docker compose up -d  
+  npm run dev
   ```
 
 ## 🌐 Endpoints o Funcionalidades
