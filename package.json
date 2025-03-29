@@ -1,0 +1,24 @@
+{
+  "name": "bases-de-datos",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"cd api && node index.js\" \"vite\"",
+    "api": "concurrently \"cd api && node index.js\"",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "lit": "^3.2.1",
+    "mysql2": "^3.14.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "vite": "^6.2.0"
+  }
+}

@@ -1,131 +1,75 @@
-# MySQL & phpMyAdmin con Docker
+# Entorno de Desarrollo MySQL + phpMyAdmin con Docker
 
-Esta guía explica cómo configurar una **base de datos MySQL** con **phpMyAdmin** usando Docker y Docker Compose. Incluye instrucciones para la instalación, inicio de contenedores, acceso a phpMyAdmin y creación de un usuario administrador.
+Adicional a la configuración con XAMPP, Este proyecto configura un entorno de desarrollo local utilizando Docker Compose. Levanta dos servicios principales:
 
----
+1. **MySQL:** Una instancia de la base de datos MySQL (última versión).
+2. **phpMyAdmin:** Una interfaz web para administrar la base de datos MySQL.
 
-## **Prerequisitos**
+Los servicios están conectados a través de una red Docker dedicada (`mydb-network`) y los datos de MySQL persisten en un volumen Docker (`mysql_data`).
 
-* Docker instalado y en ejecución (`docker --version` para verificar).
-* Docker Compose instalado (`docker-compose --version` para verificar).
+## Prerrequisitos
 
-Si Docker no está instalado, puedes usar **Colima** como alternativa:
+* Tener [Docker](https://docs.docker.com/get-docker/) instalado.
+* Tener [Docker Compose](https://docs.docker.com/compose/install/) instalado (generalmente viene incluido con Docker Desktop en Windows y macOS).
+* Si usas macOS, puedes usar [Colima](https://github.com/abiosoft/colima) o Docker Desktop. En Windows, Docker Desktop o WSL2. En Linux, la instalación nativa de Docker y Docker Compose.
 
-```bash
-brew install colima
-colima start
-```
+# Uso
 
----
-
-## **1. Ejecutar los Contenedores**
-
-Asegúrate de estar en el directorio que contiene el archivo `docker-compose.yml`, luego ejecuta:
-
-```bash
-docker-compose up -d
-```
-
-Para Docker Compose v2:
-
-```bash
-docker compose up -d
-```
-
-Verifica si los contenedores están en ejecución:
-
-```bash
-docker ps
-```
-
-Deberías ver dos contenedores: `mysql-container` y `phpmyadmin-container`.
-
----
-
-## **2. Acceder a phpMyAdmin**
-
-1. Abre un navegador y ve a  **[http://localhost:8080](http://localhost:8080/)** .
-2. Inicia sesión con las credenciales predeterminadas:
-   * **Servidor:** `mysql`
-   * **Usuario:** `myuser`
-   * **Contraseña:** `mypassword`
-
----
-
-## **3. Crear un Usuario Administrador en MySQL**
-
-1. Abre una terminal y conéctate a MySQL dentro del contenedor:
+1. **Iniciar los servicios:**
+   Abre una terminal en el directorio raíz del proyecto (donde está `docker-compose.yml`) y ejecuta:
 
    ```bash
-   docker exec -it mysql-container mysql -uroot -p
+   docker-compose up -d
    ```
 
-   Ingresa la contraseña de root de MySQL ( **root** , o la que hayas configurado en `MYSQL_ROOT_PASSWORD`).
-2. Crea un usuario administrador:
-
-   ```sql
-   CREATE USER 'myadmin'@'%' IDENTIFIED BY 'adminpassword';
-   GRANT ALL PRIVILEGES ON *.* TO 'myadmin'@'%' WITH GRANT OPTION;
-   FLUSH PRIVILEGES;
-   EXIT;
-   ```
-3. Reinicia phpMyAdmin para aplicar los cambios:
+   El comando `-d` ejecuta los contenedores en segundo plano (detached mode).
+2. **Detener los servicios:**
+   Para detener los contenedores:
 
    ```bash
-   docker restart phpmyadmin-container
+   docker-compose down
    ```
-4. Inicia sesión en phpMyAdmin con:
 
-   * **Usuario:** `myadmin`
-   * **Contraseña:** `adminpassword`
+   Este comando detiene y elimina los contenedores, pero **no** elimina el volumen `mysql_data` (tus datos persistirán).
+3. **Detener y eliminar todo (incluidos los datos):**
+   Si necesitas empezar desde cero (por ejemplo, para forzar la re-ejecución de `init.sql`), usa:
 
----
+   ```bash
+   docker-compose down -v
+   ```
 
-## **4. Detener y Reiniciar Contenedores**
+   El flag `-v` elimina los volúmenes nombrados definidos en el `docker-compose.yml` (en este caso, `mysql_data`). **¡CUIDADO! Esto borrará permanentemente todos los datos de tu base de datos.**
 
-Para detener los contenedores:
+## Acceso a los Servicios
 
-```bash
-docker-compose down
-```
+* **phpMyAdmin:** Abre tu navegador web y ve a `http://localhost:5050`.
 
-Para reiniciar los contenedores:
+  * **Servidor:** `mysql`
+  * **Usuario:** `admin` (o `root`)
+  * **Contraseña:** `admin` (o la `MYSQL_ROOT_PASSWORD` si usas `root`)
+* **MySQL (desde otro contenedor o aplicación):**
 
-```bash
-docker-compose up -d
-```
+  * **Host:** `mysql` (el nombre del servicio dentro de la red Docker `mydb-network`)
+  * **Puerto:** `3306` (puerto estándar de MySQL)
+  * **Usuario:** `admin`
+  * **Contraseña:** `admin`
+  * **Base de datos:** `pedidosdatabase`
 
-Para eliminar todo (contenedores, redes, volúmenes):
+  *(Nota: El puerto 3306 de MySQL no está expuesto directamente al host en esta configuración. Para conectarte desde tu máquina local con un cliente SQL, necesitarías añadir `ports: - "3306:3306"` a la sección `mysql` del `docker-compose.yml`)*.
 
-```bash
-docker-compose down -v
-```
+## Troubleshooting
 
----
+### Problema: Las tablas definidas en `init.sql` no se crean.
 
-## **5. Solución de Problemas**
+1. Detén los contenedores y elimina el volumen:
 
-* **"Cannot connect to the Docker daemon"** → Asegúrate de que Docker está en ejecución: `docker info`.
-* **phpMyAdmin muestra "mysqli::real_connect(): (HY000/2002)"** → Asegúrate de que `PMA_HOST` está configurado correctamente (`mysql`).
-* **Errores de permisos en `/var/run/docker.sock`** → Es posible que necesites agregar tu usuario al grupo `docker`:
+   ```bash
+   docker-compose down -v
+   ```
+   **¡Advertencia! Este comando eliminará todos los datos almacenados en la base de datos.**
+2. Vuelve a iniciar los servicios:
 
-  ```bash
-  sudo usermod -aG docker $(whoami)
-  ```
-
-  Luego, cierra sesión y vuelve a iniciarla.
-
----
-
-## **6. Notas Adicionales**
-
-* Para  **cambiar la configuración de la base de datos** , edita el archivo `docker-compose.yml`.
-* Puedes **conectarte a MySQL desde otra aplicación** usando:
-  ```
-  Host: localhost
-  Puerto: 3306
-  Usuario: myuser
-  Contraseña: mypassword
-  ```
-
-🚀 **¡Tu configuración de MySQL y phpMyAdmin está lista!** ¡Avísame si tienes algún problema! 😊
+   ```bash
+   docker-compose up -d
+   ```
+   Ahora, al iniciar, MySQL encontrará el directorio de datos vacío y ejecutará los scripts en `/docker-entrypoint-initdb.d/`
