@@ -5,6 +5,7 @@ dotenv.config();
 
 const pool = mysql.createPool({
   host: 'localhost',
+  port: 3307,
   user: 'admin',
   password: 'admin',
   database: 'pedidosdatabase',

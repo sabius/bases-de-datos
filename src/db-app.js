@@ -75,10 +75,10 @@ export class DbApp extends LitElement {
         transition: filter 300ms;
       }
       .logo:hover {
-        filter: drop-shadow(0 0 2em #646cffaa);
+        filter: drop-shadow(0 0 2em #55f665);
       }
       .logo.lit:hover {
-        filter: drop-shadow(0 0 2em #325cffaa);
+        filter: drop-shadow(0 0 2em #f8532a);
       }
 
       .card {
