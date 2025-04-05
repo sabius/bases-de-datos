@@ -16,15 +16,15 @@ export const setupRouter = (outlet) => {
     },
     {
       path: '/clientes',
-      component: 'clientes-list', // Make sure this component exists
+      component: 'clientes-list',
     },
     {
       path: '/pedidos',
-      component: 'pedidos-list', // Make sure this component exists
+      component: 'pedidos-list',
     },
     {
       path: '/envios',
-      component: 'envios-list', // Make sure this component exists
+      component: 'envios-list',
     },
   ]);
 };

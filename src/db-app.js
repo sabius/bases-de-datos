@@ -3,8 +3,9 @@ import { setupRouter } from "./router.js";
 import litLogo from "./assets/lit.svg";
 import viteLogo from "/vite.svg";
 
-import "./components/clientesList.js";
+import "./components/clientesList";
 import "./components/productosList";
+import "./components/pedidosList";
 
 /**
  * An example element.

@@ -22,20 +22,20 @@ export class ClientesList extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.fetchUsers();
+    this.fetchClientes();
   }
 
-  async fetchUsers() {
+  async fetchClientes() {
     try {
       const res = await fetch("/api/clientes");
-      if (!res.ok) throw new Error("Error fetching users");
+      if (!res.ok) throw new Error("Error al traer clientes");
       this.users = await res.json();
     } catch (err) {
-      console.error("Fetch error:", err);
+      console.error("Error:", err);
     }
   }
 
-  async addUser(e) {
+  async addCliente(e) {
     e.preventDefault();
     try {
       const res = await fetch("/api/clientes", {
@@ -107,7 +107,7 @@ export class ClientesList extends LitElement {
     return html`
       <h2>Lista de Clientes</h2>
 
-      <form @submit="${this.addUser}">
+      <form @submit="${this.addCliente}">
         <input name="nombre" .value="${this.nombre}" @input="${this.handleInputChange}" placeholder="Nombre" required />
         <input name="email" .value="${this.email}" @input="${this.handleInputChange}" placeholder="Email" required />
         <input name="telefono" .value="${this.telefono}" @input="${this.handleInputChange}" placeholder="Teléfono" />
