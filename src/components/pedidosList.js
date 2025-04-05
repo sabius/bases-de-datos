@@ -18,19 +18,19 @@ export class ProductosList extends LitElement {
 
   async fetchProductos() {
     try {
-      const response = await fetch('/api/productos');
+      const response = await fetch('/api/pedidos');
 
       if (!response.ok) {
         throw new Error(`Api responded with status ${response.status}`);
       }
 
       const data = await response.json();
-      this.productos = data;
+      this.pedidos = data;
 
-      console.log(this.productos);
+      console.log(this.pedidos);
     }
     catch (error) {
-      console.error('Error al traer productos:', error)
+      console.error('Error al traer pedidos:', error)
     }
   }
 
@@ -44,14 +44,14 @@ export class ProductosList extends LitElement {
           <th>Precio</th>
           <th>Stock</th>
         </tr>
-        ${this.productos.map(
-          (producto) => html`
+        ${this.pedidos.map(
+          (pedido) => html`
             <tr>
-              <td>${producto.id_producto}</td>
-              <td>${producto.nombre}</td>
-              <td>${producto.descripcion}</td>
-              <td>${producto.precio}</td>
-              <td>${producto.stock}</td>
+              <td>${pedido.id_pedido}</td>
+              <td>${pedido.nombre}</td>
+              <td>${pedido.descripcion}</td>
+              <td>${pedido.precio}</td>
+              <td>${pedido.stock}</td>
             </tr>
           `
         )}

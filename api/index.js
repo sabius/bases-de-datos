@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import clientesRoutes from './routes/clientes.js';
 import productosRoutes from './routes/productos.js';
+import pedidosRoutes from './routes/pedidos.js';
 import tablesRoutes from './routes/tables.js';
 
 dotenv.config();

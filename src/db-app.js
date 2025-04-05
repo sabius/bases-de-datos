@@ -1,9 +1,9 @@
-import { LitElement, css, html } from 'lit'
-import litLogo from './assets/lit.svg'
-import viteLogo from '/vite.svg'
+import { LitElement, css, html } from "lit";
+import litLogo from "./assets/lit.svg";
+import viteLogo from "/vite.svg";
 
-import './components/userList';
-import './components/productosList'
+import "./components/userList";
+import "./components/productosList";
 
 /**
  * An example element.
@@ -23,115 +23,197 @@ export class DbApp extends LitElement {
        * The number of times the button has been clicked.
        */
       count: { type: Number },
-    }
+    };
   }
 
   constructor() {
-    super()
-    this.docsHint = 'Click on the Vite and Lit logos to learn more'
-    this.count = 0
+    super();
+    this.docsHint = "Click on the Vite and Lit logos to learn more";
+    this.count = 0;
   }
 
   render() {
     return html`
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src=${viteLogo} class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://lit.dev" target="_blank">
-          <img src=${litLogo} class="logo lit" alt="Lit logo" />
-        </a>
-      </div>
-      <slot></slot>
-      <div class="card">
-        <button @click=${this._onClick} part="button">
-          count is ${this.count}
-        </button>
-      </div>
-      <p class="read-the-docs">${this.docsHint}</p>
+      <div class="layout">
+        <aside class="sidebar">
+          <h2>TechLogistics</h2>
+          <!-- <nav>
+            <a href="#">Dashboard</a>
+            <a href="#">Pedidos</a>
+            <a href="#">Clientes</a>
+            <a href="#">Productos</a>
+            <a href="#">Envíos</a>
+          </nav> -->
+        </aside>
 
-      <user-list></user-list>
-      <productos-list></productos-list>
+        <main class="main-content">
+          <header class="header">
+            <h1>Panel de Control</h1>
+          </header>
+
+          <section>
+            <user-list></user-list>
+          </section>
+
+          <section>
+            <h2>Lista de Productos</h2>
+            <productos-list></productos-list>
+          </section>
+        </main>
+      </div>
     `;
   }
 
   _onClick() {
-    this.count++
+    this.count++;
   }
 
   static get styles() {
     return css`
       :host {
-        max-width: 1280px;
-        margin: 0 auto;
+        display: block;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #1f2937;
+      }
+
+      .layout {
+        display: flex;
+        height: 100%;
+      }
+
+      .sidebar {
+        width: 260px;
+        background-color: #1f2937;
+        color: white;
+        padding: 2rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar h2 {
+        font-size: 1.75rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .sidebar nav a {
+        display: block;
+        color: #9ca3af;
+        text-decoration: none;
+        margin-bottom: 1.2rem;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: color 0.2s;
+      }
+
+      .sidebar nav a:hover {
+        color: white;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 2.5rem 3rem;
+        background-color: #f3f4f6;
+        overflow-y: auto;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .overview {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .overview .card {
+        flex: 1;
+        background-color: white;
+        border-radius: 1rem;
         padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         text-align: center;
       }
 
-      .logo {
-        height: 6em;
-        padding: 1.5em;
-        will-change: filter;
-        transition: filter 300ms;
-      }
-      .logo:hover {
-        filter: drop-shadow(0 0 2em #55f665);
-      }
-      .logo.lit:hover {
-        filter: drop-shadow(0 0 2em #f8532a);
+      .overview .card h3 {
+        margin: 0 0 0.8rem;
+        font-size: 1.2rem;
+        color: #4b5563;
       }
 
-      .card {
-        padding: 2em;
+      .overview .card p {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #111827;
       }
 
-      .read-the-docs {
-        color: #888;
+      section {
+        margin-bottom: 3rem;
       }
 
-      a {
-        font-weight: 500;
-        color: #646cff;
-        text-decoration: inherit;
-      }
-      a:hover {
-        color: #535bf2;
-      }
-
-      ::slotted(h1) {
-        font-size: 3.2em;
-        line-height: 1.1;
+      section h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+        color: #1f2937;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 0.5rem;
       }
 
-      button {
-        border-radius: 8px;
-        border: 1px solid transparent;
-        padding: 0.6em 1.2em;
-        font-size: 1em;
-        font-weight: 500;
-        font-family: inherit;
-        background-color: #1a1a1a;
-        cursor: pointer;
-        transition: border-color 0.25s;
-      }
-      button:hover {
-        border-color: #646cff;
-      }
-      button:focus,
-      button:focus-visible {
-        outline: 4px auto -webkit-focus-ring-color;
+      /* Estilos para tablas internas de los componentes */
+      ::slotted(table) {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
       }
 
-      @media (prefers-color-scheme: light) {
-        a:hover {
-          color: #747bff;
+      ::slotted(th) {
+        background-color: #3b82f6;
+        color: white;
+        padding: 1rem;
+        text-align: left;
+        font-size: 0.95rem;
+      }
+
+      ::slotted(td) {
+        padding: 1rem;
+        border-top: 1px solid #e5e7eb;
+        font-size: 0.95rem;
+      }
+
+      ::slotted(tr:hover) {
+        background-color: #f0f9ff;
+      }
+
+      @media (max-width: 768px) {
+        .layout {
+          flex-direction: column;
         }
-        button {
-          background-color: #f9f9f9;
+
+        .sidebar {
+          width: 100%;
+          flex-direction: row;
+          justify-content: space-around;
+          padding: 1rem;
+        }
+
+        .main-content {
+          padding: 1.5rem;
+        }
+
+        .overview {
+          flex-direction: column;
+          gap: 1.5rem;
         }
       }
-    `
+    `;
   }
 }
 
-window.customElements.define('db-app', DbApp)
+window.customElements.define("db-app", DbApp);
