@@ -35,7 +35,7 @@ export class UserList extends LitElement {
 
   render() {
     return html`
-      <h2>Lista de Clientes</h2>
+      <h2>Lista de Clientes Prueba </h2>
       <table>
         <tr>
           <th>ID</th>
@@ -54,6 +54,14 @@ export class UserList extends LitElement {
           `
         )}
       </table>
+      <h2>Agregar Cliente</h2>
+      <form id="add-client-form" @submit="${this.addClient}">
+        <input type="text" placeholder="Nombre" id="nombre" />
+        <input type="email" placeholder="Email" id="email" />
+        <input type="text" placeholder="Telefono" id="telefono" />
+        <input type="text" placeholder="Direccion" id="direccion" />
+        <button type="submit">Agregar Cliente</button>
+      <input type="text" placeholder="Nombre" id="nombre" />
     `;
   }
 

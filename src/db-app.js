@@ -37,13 +37,13 @@ export class DbApp extends LitElement {
       <div class="layout">
         <aside class="sidebar">
           <h2>TechLogistics</h2>
-          <!-- <nav>
+           <nav>
             <a href="#">Dashboard</a>
             <a href="#">Pedidos</a>
             <a href="#">Clientes</a>
             <a href="#">Productos</a>
             <a href="#">Envíos</a>
-          </nav> -->
+          </nav> 
         </aside>
 
         <main class="main-content">
