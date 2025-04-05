@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 
-export class UserList extends LitElement {
-  // Se declaran las propiedades reactivas. En este cao, se espera que users se actualice luego del fetch a la base de datos.
+export class ClientesList extends LitElement {
+  // Se declaran las propiedades reactivas. En este caso, se espera que users se actualice luego del fetch a la base de datos.
   static properties = {
     users: { type: Array },
   };
@@ -18,7 +18,7 @@ export class UserList extends LitElement {
 
   async fetchUsers() {
     try {
-      const response = await fetch("/api/clientes"); // Ensure this URL is correct
+      const response = await fetch("/api/clientes");
 
       if (!response.ok) {
         throw new Error(`API responded with status ${response.status}`);
@@ -70,4 +70,4 @@ export class UserList extends LitElement {
   }
 }
 
-customElements.define("user-list", UserList);
+customElements.define("clientes-list", ClientesList);

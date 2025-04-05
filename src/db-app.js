@@ -1,8 +1,9 @@
 import { LitElement, css, html } from "lit";
+import { setupRouter } from "./router.js";
 import litLogo from "./assets/lit.svg";
 import viteLogo from "/vite.svg";
 
-import "./components/userList";
+import "./components/clientesList.js";
 import "./components/productosList";
 
 /**
@@ -32,33 +33,42 @@ export class DbApp extends LitElement {
     this.count = 0;
   }
 
+  firstUpdated() {
+    const outlet = this.renderRoot.querySelector("#router-view");
+    setupRouter(outlet);
+  }
+
+  _navigate(e) {
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute("href");
+    window.history.pushState({}, "", href);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
   render() {
     return html`
       <div class="layout">
         <aside class="sidebar">
-          <h2>TechLogistics</h2>
-          <!-- <nav>
-            <a href="#">Dashboard</a>
-            <a href="#">Pedidos</a>
-            <a href="#">Clientes</a>
-            <a href="#">Productos</a>
-            <a href="#">Envíos</a>
-          </nav> -->
+          <h1>TechLogistics</h1>
+          <nav>
+            <a href="/dashboard" @click=${this._navigate}>Dashboard</a>
+            <a href="/pedidos" @click=${this._navigate}>Pedidos</a>
+            <a href="/clientes" @click=${this._navigate}>Clientes</a>
+            <a href="/productos" @click=${this._navigate}>Productos</a>
+            <a href="/envios" @click=${this._navigate}>Envíos</a>
+          </nav>
         </aside>
 
         <main class="main-content">
-          <header class="header">
-            <h1>Panel de Control</h1>
-          </header>
-
-          <section>
+          <section id="router-view"></section>
+          <!-- <section>
             <user-list></user-list>
           </section>
 
           <section>
             <h2>Lista de Productos</h2>
             <productos-list></productos-list>
-          </section>
+          </section> -->
         </main>
       </div>
     `;
