@@ -16,6 +16,7 @@ app.use(cors());
 
 app.use('/api/clientes', clientesRoutes);
 app.use('/api/productos', productosRoutes);
+app.use('/api/pedidos', pedidosRoutes);
 
 app.use('/api/tables', tablesRoutes);
 

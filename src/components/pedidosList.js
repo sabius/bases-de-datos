@@ -1,6 +1,6 @@
 import { LitElement, css, html } from "lit";
 
-export class ProductosList extends LitElement {
+export class PedidosList extends LitElement {
 
   static properties = {
     productos: { type: Array },
@@ -8,15 +8,15 @@ export class ProductosList extends LitElement {
 
   constructor() {
     super();
-    this.productos = [];
+    this.pedidos = [];
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.fetchProductos();
+    this.fetchPedidos();
   }
 
-  async fetchProductos() {
+  async fetchPedidos() {
     try {
       const response = await fetch('/api/pedidos');
 
@@ -72,4 +72,4 @@ export class ProductosList extends LitElement {
   }
 }
 
-customElements.define('productos-list', ProductosList)
+customElements.define('pedidos-list', PedidosList)
