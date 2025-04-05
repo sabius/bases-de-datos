@@ -105,7 +105,7 @@ export class ClientesList extends LitElement {
 
   render() {
     return html`
-      <h2>Lista de Clientes</h2>
+      <h2>Panel de control de Clientes</h2>
 
       <form @submit="${this.addCliente}">
         <input name="nombre" .value="${this.nombre}" @input="${this.handleInputChange}" placeholder="Nombre" required />

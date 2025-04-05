@@ -3,42 +3,54 @@ import pool from '../db.js';
 
 const router = express.Router();
 
-// Traer todos los pedidos con productos
 router.get('/', async (req, res) => {
   try {
-    // Obtener todos los pedidos
-    const [pedidos] = await pool.query('SELECT * FROM Pedidos');
+    const [rows] = await pool.query(`
+      SELECT
+        p.id_pedido,
+        c.nombre AS nombre_cliente,
+        pr.nombre AS nombre_producto,
+        pp.cantidad,
+        t.nombre AS nombre_transportista,
+        e.descripcion AS estado_pedido
+      FROM Pedidos p
+      JOIN Clientes c ON p.id_cliente = c.id_cliente
+      JOIN PedidoProductos pp ON p.id_pedido = pp.id_pedido
+      JOIN Productos pr ON pp.id_producto = pr.id_producto
+      LEFT JOIN Transportistas t ON p.id_transportista = t.id_transportista
+      JOIN EstadosEnvio e ON p.id_estado = e.id_estado
+      ORDER BY p.id_pedido DESC
+    `);
 
-    // Para cada pedido, obtener los productos asociados
-    const pedidosConProductos = await Promise.all(
-      pedidos.map(async (pedido) => {
-        const [productos] = await pool.query(
-          `SELECT
-            prod.id_producto,
-            prod.nombre,
-            prod.descripcion,
-            prod.precio,
-            prod.stock,
-            pp.cantidad,
-            pp.precio_unitario,
-            pp.subtotal
-          FROM PedidoProductos pp
-          JOIN Productos prod ON pp.id_producto = prod.id_producto
-          WHERE pp.id_pedido = ?`,
-          [pedido.id_pedido]
-        );
+    // Agrupamos los productos por pedido
+    const pedidosMap = {};
 
-        return {
-          ...pedido,
-          productos,
+    rows.forEach(row => {
+      const id = row.id_pedido;
+
+      if (!pedidosMap[id]) {
+        pedidosMap[id] = {
+          id_pedido: id,
+          cliente: row.nombre_cliente,
+          transportista: row.nombre_transportista,
+          estado: row.estado_pedido,
+          productos: []
         };
-      })
-    );
+      }
 
-    res.json(pedidosConProductos);
+      pedidosMap[id].productos.push({
+        nombre: row.nombre_producto,
+        cantidad: row.cantidad
+      });
+    });
+
+    // Convertimos el mapa a un array
+    const pedidosAgrupados = Object.values(pedidosMap);
+
+    res.json(pedidosAgrupados);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error cargando los pedidos con productos' });
+    console.error('Error al obtener los pedidos:', error);
+    res.status(500).json({ error: 'Error cargando los pedidos con detalles' });
   }
 });
 
