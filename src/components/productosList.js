@@ -105,7 +105,7 @@ export class ProductosList extends LitElement {
 
   render() {
     return html`
-      <h2>Lista de Productos</h2>
+      <h2>Panel de control de productos</h2>
 
       <form @submit="${this.addProducto}">
         <input

@@ -8,7 +8,7 @@ export const setupRouter = (outlet) => {
     { path: '/', redirect: '/dashboard' },
     {
       path: '/dashboard',
-      component: 'user-list',
+      component: 'app-dashboard',
     },
     {
       path: '/productos',
