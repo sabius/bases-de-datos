@@ -61,14 +61,6 @@ export class DbApp extends LitElement {
 
         <main class="main-content">
           <section id="router-view"></section>
-          <!-- <section>
-            <user-list></user-list>
-          </section>
-
-          <section>
-            <h2>Lista de Productos</h2>
-            <productos-list></productos-list>
-          </section> -->
         </main>
       </div>
     `;
