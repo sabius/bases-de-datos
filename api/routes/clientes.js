@@ -3,7 +3,7 @@ import pool from '../db.js'
 
 const router = express.Router();
 
-// Get all clients
+// Traer todos los clientes
 router.get('/', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM Clientes');
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Add new client
+// Agregar cliente
 router.post('/', async (req, res) => {
   const { nombre, email, telefono, direccion } = req.body;
   try {
