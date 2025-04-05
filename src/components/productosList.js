@@ -36,6 +36,7 @@ export class ProductosList extends LitElement {
 
   render() {
     return html`
+      <h2>Lista de Productos</h2>
       <table>
         <tr>
           <th>ID</th>
