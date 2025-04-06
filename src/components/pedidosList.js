@@ -1,34 +1,117 @@
 import { LitElement, css, html } from "lit";
 
 export class PedidosList extends LitElement {
-
   static properties = {
     pedidos: { type: Array },
-  }
+    clientes: { type: Array },
+    productos: { type: Array },
+    transportistas: { type: Array },
+    nuevoPedido: { type: Object },
+  };
 
   constructor() {
     super();
     this.pedidos = [];
+    this.clientes = [];
+    this.productos = [];
+    this.transportistas = [];
+    this.nuevoPedido = {
+      cliente: '',
+      transportista: '',
+      productos: [],
+    };
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.fetchPedidos();
+    this.fetchClientes();
+    this.fetchProductos();
+    this.fetchTransportistas();
   }
 
   async fetchPedidos() {
     try {
       const response = await fetch('/api/pedidos');
-
-      if (!response.ok) {
-        throw new Error(`Api responded with status ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`Error al obtener pedidos: ${response.status}`);
       const data = await response.json();
       this.pedidos = data;
+    } catch (error) {
+      console.error('Error al traer pedidos:', error);
     }
-    catch (error) {
-      console.error('Error al traer pedidos:', error)
+  }
+
+  async fetchClientes() {
+    try {
+      const response = await fetch('/api/clientes');
+      if (!response.ok) throw new Error(`Error al obtener clientes: ${response.status}`);
+      const data = await response.json();
+      this.clientes = data;
+    } catch (error) {
+      console.error('Error al traer clientes:', error);
+    }
+  }
+
+  async fetchProductos() {
+    try {
+      const response = await fetch('/api/productos');
+      if (!response.ok) throw new Error(`Error al obtener productos: ${response.status}`);
+      const data = await response.json();
+      this.productos = data;
+    } catch (error) {
+      console.error('Error al traer productos:', error);
+    }
+  }
+
+  async fetchTransportistas() {
+    try {
+      const response = await fetch('/api/transportistas');
+      if (!response.ok) throw new Error(`Error al obtener transportistas: ${response.status}`);
+      const data = await response.json();
+      this.transportistas = data;
+    } catch (error) {
+      console.error('Error al traer transportistas:', error);
+    }
+  }
+
+  handleInputChange(e) {
+    const { name, value } = e.target;
+    this.nuevoPedido = { ...this.nuevoPedido, [name]: value };
+  }
+
+  handleAddProducto() {
+    const productoId = parseInt(this.shadowRoot.getElementById('producto-id').value, 10);
+    const cantidad = parseInt(this.shadowRoot.getElementById('producto-cantidad').value, 10);
+
+    const producto = this.productos.find((p) => p.id_producto === productoId);
+
+    if (producto && cantidad > 0 && cantidad <= producto.stock) {
+      const subtotal = cantidad * producto.precio;
+      this.nuevoPedido.productos = [
+        ...this.nuevoPedido.productos,
+        { id: producto.id_producto, nombre: producto.nombre, cantidad, subtotal },
+      ];
+      this.shadowRoot.getElementById('producto-id').value = '';
+      this.shadowRoot.getElementById('producto-cantidad').value = '';
+    } else {
+      alert('Cantidad no válida o producto sin suficiente stock.');
+    }
+  }
+
+  async handleSubmit(e) {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/pedidos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.nuevoPedido),
+      });
+      if (!response.ok) throw new Error(`Error al crear pedido: ${response.status}`);
+      const nuevoPedido = await response.json();
+      this.pedidos = [...this.pedidos, nuevoPedido];
+      this.nuevoPedido = { cliente: '', transportista: '', productos: [] };
+    } catch (error) {
+      console.error('Error al crear pedido:', error);
     }
   }
 
@@ -47,6 +130,64 @@ export class PedidosList extends LitElement {
   render() {
     return html`
       <h2>Lista de Pedidos</h2>
+
+      <!-- Formulario para crear un nuevo pedido -->
+      <form @submit="${this.handleSubmit}">
+        <fieldset>
+          <legend>Crear Nuevo Pedido</legend>
+          <label>
+            Cliente:
+            <select name="cliente" @change="${this.handleInputChange}" required>
+              <option value="">Seleccione un cliente</option>
+              ${this.clientes.map(
+                (cliente) => html`<option value="${cliente.id_cliente}">${cliente.nombre}</option>`
+              )}
+            </select>
+          </label>
+          <label>
+            Transportista:
+            <select name="transportista" @change="${this.handleInputChange}">
+              <option value="">Seleccione un transportista</option>
+              ${this.transportistas.map(
+                (transportista) =>
+                  html`<option value="${transportista.id_transportista}">${transportista.nombre}</option>`
+              )}
+            </select>
+          </label>
+          <fieldset>
+            <legend>Agregar Producto</legend>
+            <label>
+              Producto:
+              <select id="producto-id">
+                <option value="">Seleccione un producto</option>
+                ${this.productos.map(
+                  (producto) =>
+                    html`<option value="${producto.id_producto}">
+                      ${producto.nombre} (Stock: ${producto.stock})
+                    </option>`
+                )}
+              </select>
+            </label>
+            <label>
+              Cantidad:
+              <input type="number" id="producto-cantidad" min="1" />
+            </label>
+            <button type="button" @click="${this.handleAddProducto}">Agregar Producto</button>
+          </fieldset>
+          <ul>
+            ${this.nuevoPedido.productos.map(
+              (producto) => html`
+                <li>
+                  ${producto.nombre} - Cantidad: ${producto.cantidad} - Subtotal: ${producto.subtotal.toFixed(2)}
+                </li>
+              `
+            )}
+          </ul>
+          <button type="submit">Crear Pedido</button>
+        </fieldset>
+      </form>
+
+      <!-- Lista de pedidos -->
       ${this.pedidos.map(
         (pedido) => html`
           <div class="pedido">
